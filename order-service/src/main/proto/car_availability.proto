@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package cars.v1;
+
+option java_multiple_files = true;
+option java_package = "ru.malov.grpc.cars.v1";
+option java_outer_classname = "CarAvailabilityProto";
+
+service CarAvailabilityService {
+  rpc GetAvailableCars (GetAvailableCarsRequest) returns (GetAvailableCarsResponse);
+  rpc GetAvailableCarById (GetAvailableCarByIdRequest) returns (GetAvailableCarByIdResponse);
+}
+
+message GetAvailableCarsRequest {}
+
+message GetAvailableCarsResponse {
+  repeated CarItem cars = 1;
+}
+
+message GetAvailableCarByIdRequest {
+  string id = 1;
+}
+
+message GetAvailableCarByIdResponse {
+  CarItem car = 1;
+}
+
+message CarItem {
+  string id = 1;
+  string brand = 2;
+  string model = 3;
+  string bodyType = 4;
+  string color = 5;
+  string fuelType = 6;
+  string transmissionType = 7;
+  string driveType = 8;
+  int32 enginePower = 9;
+  int32 engineVolume = 10;
+  string price = 11;
+  string status = 12;
+}

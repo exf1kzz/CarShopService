@@ -1,0 +1,34 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: storage-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5434/storage_db
+    username: postgres
+    password: postgres
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+  liquibase:
+    change-log: classpath:db/changelog/master.xml
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8081/realms/car-shop
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: grisha
+    password: grisha
+
+grpc:
+  server:
+    port: 9090

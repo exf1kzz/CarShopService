@@ -1,0 +1,36 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: order-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/order_db
+    username: postgres
+    password: postgres
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+  liquibase:
+    change-log: classpath:db/changelog/master.xml
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8081/realms/car-shop
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: grisha
+    password: grisha
+
+grpc:
+  client:
+    storage-service:
+      address: static://localhost:9090
+      negotiationType: PLAINTEXT
