@@ -22,25 +22,6 @@
 - Lombok
 - Testcontainers
 
-## Структура проекта
-
-```text
-.
-├── order-service
-│   ├── src/main/java
-│   ├── src/main/resources
-│   └── src/integrationTest/java
-├── storage-service
-│   ├── src/main/java
-│   ├── src/main/resources
-│   └── src/integrationTest/java
-├── docker
-│   └── keycloak
-├── docker-compose.yml
-├── build.gradle
-└── settings.gradle
-```
-
 ## Локальный запуск инфраструктуры
 
 Для запуска PostgreSQL, Keycloak и RabbitMQ нужен Docker.
@@ -81,6 +62,26 @@ docker compose up -d
 - gRPC-сервер `storage-service`: `9090`
 - Keycloak realm issuer: `http://localhost:8081/realms/car-shop`
 
+## JWT-токен для локальной разработки
+
+Для запросов к защищенным эндпоинтам можно получить JWT-токен из локального Keycloak:
+
+```bash
+curl -X POST http://localhost:8081/realms/car-shop/protocol/openid-connect/token \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=password" \
+  -d "client_id=car-shop-api" \
+  -d "username=admin2" \
+  -d "password=admin"
+```
+
+В ответе нужно взять значение поля `access_token`. Также доступны роли:
+- User(user:user)
+- Manager(manager:manager)
+- Warehouse_admin(warehouse:warehouse)
+
+Этот способ предназначен только для локального запуска и проверки API.
+
 ## Swagger
 
 После запуска сервисов документация API доступна по адресам:
@@ -97,26 +98,4 @@ docker compose up -d
 
 Миграции применяются автоматически при старте сервиса.
 
-## Тесты
 
-Запуск unit-тестов:
-
-```bash
-./gradlew test
-```
-
-Запуск интеграционных тестов:
-
-```bash
-./gradlew integrationTest
-```
-
-Для интеграционных тестов должен быть запущен Docker, так как тесты используют Testcontainers.
-
-## Что не коммитить
-
-В публичный репозиторий не должны попадать:
-
-- `.env` и другие локальные конфиги с секретами;
-- `.idea`, `.gradle`, `build` и другие локальные файлы IDE/сборки;
-- реальные production-пароли, токены и приватные ключи.
